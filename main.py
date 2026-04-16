@@ -102,20 +102,26 @@ if "lat" in df.columns and "lon" in df.columns:
 outliers_removed = 0
 
 numeric_cols = df.select_dtypes(include=['float64']).columns
+before = df.shape[0]
 
-for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+if len(numeric_cols) > 0:
+    # ⚡ BOLT OPTIMIZATION: Vectorized outlier removal to prevent O(N) DataFrame copies
+    # Calculate quantiles for all numeric columns simultaneously
+    Q1 = df[numeric_cols].quantile(0.25)
+    Q3 = df[numeric_cols].quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    # Create a single boolean mask for all rows where NO numeric column is an outlier
+    mask = ((df[numeric_cols] >= lower) & (df[numeric_cols] <= upper)).all(axis=1)
 
-    outliers_removed += (before - after)
+    # Apply the mask in a single operation
+    df = df[mask]
+
+after = df.shape[0]
+outliers_removed = before - after
 
 print("\n🔹 Outliers removed:", outliers_removed)
 
