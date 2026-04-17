@@ -1,0 +1,27 @@
+# Datasets / Data files
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.json
+*.sqlite
+*.db
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*
+*.pem
+*.key
+credentials.json
+client_secret.json
+
+# Python Artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE / OS files
+.vscode/
+.idea/
+.DS_Store
