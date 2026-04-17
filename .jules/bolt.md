@@ -1,0 +1,3 @@
+## 2024-06-25 - Pandas Cumulative Boolean Mask vs Sequential Filtering
+**Learning:** When switching from sequential DataFrame filtering (`df = df[condition]`) to a cumulative boolean mask (`mask = mask & condition`) for outlier removal, the underlying mathematical behavior changes because quantiles will then be computed on the original data rather than the progressively filtered data. To preserve the exact behavior, quantiles must be calculated on the currently valid slice (`df.loc[mask, col]`).
+**Action:** When replacing sequential `df = df[...]` filtering in a loop with a cumulative mask to save O(N) allocations, always compute interim statistics (like quantiles) on the masked data (`df.loc[mask, col]`) rather than the original `df[col]`.
