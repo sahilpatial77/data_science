@@ -1,0 +1,3 @@
+## 2024-04-17 - [Optimizing Pandas DataFrame Multiple Condition Filtering]
+**Learning:** Sequential DataFrame re-assignments within a loop (`df = df[condition]`) create O(N) memory allocation overhead as a new DataFrame is allocated for each condition.
+**Action:** Use a cumulative boolean mask (`mask &= condition`) inside the loop, and apply the final mask to the DataFrame exactly once after the loop (`df = df[mask]`) to save memory and time.
