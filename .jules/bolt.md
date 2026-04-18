@@ -1,0 +1,3 @@
+## 2024-04-18 - Pandas Outlier Filtering Performance vs Mathematical Behavior
+**Learning:** Switching from sequential DataFrame filtering to a cumulative boolean mask for outlier removal in pandas avoids O(N) memory allocation overhead, but changes the underlying mathematical behavior because quantiles are then computed on the original data rather than progressively filtered data.
+**Action:** Always prefer evaluating boolean masks cumulatively rather than sequentially modifying DataFrames within loops for performance, but document the subtle mathematical shift when applying to quantile-based filtering.
