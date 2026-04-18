@@ -1,0 +1,9 @@
+# Ignore datasets
+*.csv
+
+# Ignore environment variables/secrets
+.env
+
+# Ignore compiled python artifacts
+__pycache__/
+*.pyc
