@@ -1,0 +1,3 @@
+## 2024-05-18 - Pandas Progressive Filtering Optimization
+**Learning:** Sequential DataFrame filtering inside loops (e.g., `df = df[...]`) forces O(N) memory allocation on every iteration, creating a significant performance bottleneck for large datasets. However, replacing it with a simple, fully vectorized cumulative mask changes the mathematical behavior because subsequent iterations' quantiles must be calculated on the *already filtered* data, not the original data.
+**Action:** To optimize performance without altering behavior, use a cumulative boolean mask (`mask &= ...`) but evaluate quantiles specifically on the progressively masked data (e.g., `df.loc[mask, col]`). Finally, apply the cumulative mask to the DataFrame once outside the loop (`df = df[mask]`).
