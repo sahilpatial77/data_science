@@ -1,0 +1,3 @@
+## 2026-04-20 - Pandas DataFrame Progressive Filtering Performance
+**Learning:** Sequential reassignment in Pandas loops (e.g. `df = df[condition]`) triggers expensive O(N) memory allocation and copy. If filtering logic requires calculations on previously-filtered data (like updating quantiles for outliers), calculating only on `df.loc[valid_mask, col]` instead of copying the dataframe ensures proper mathematical behavior while improving performance.
+**Action:** When filtering progressively based on conditions calculated per loop, compute on the progressively masked series via `loc` and accumulate conditions with a single boolean mask instead of recreating the DataFrame repeatedly.
