@@ -1,0 +1,3 @@
+## 2026-04-20 - Pandas DataFrame Loop Memory Allocation
+**Learning:** In pandas, switching from sequential DataFrame filtering to a simple cumulative boolean mask for outlier removal changes the underlying mathematical behavior. Sequentially modifying DataFrames within loops leads to O(N) memory allocation overhead, which acts as a bottleneck.
+**Action:** To optimize performance while preserving progressive filtering behavior, evaluate boolean masks cumulatively and compute quantiles on the progressively masked data (e.g., `df.loc[mask, col]`). Apply the final boolean mask to the DataFrame only once after the loop to avoid O(N) memory reallocations.
