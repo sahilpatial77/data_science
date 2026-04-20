@@ -1,0 +1,14 @@
+# Data files
+*.csv
+crime dataset.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv/
