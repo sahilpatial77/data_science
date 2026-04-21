@@ -1,0 +1,10 @@
+*.csv
+crime dataset.csv
+
+__pycache__/
+*.py[cod]
+
+.env
+.venv/
+env/
+venv/
