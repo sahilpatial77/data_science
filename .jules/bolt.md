@@ -1,0 +1,3 @@
+## 2024-04-22 - Pandas O(N) memory allocations during sequential filtering
+**Learning:** Sequential DataFrame reassignment within a loop (e.g., `df = df[df[col] < threshold]`) causes O(N) memory allocations, degrading performance significantly on large datasets. While switching to a cumulative boolean mask improves performance, evaluating the mask progressively (e.g., computing quantiles on `df.loc[mask, col]`) is essential to preserve the exact mathematical behavior of the sequential filtering.
+**Action:** Prefer cumulative boolean masks to avoid O(N) allocation overhead in loops, but always evaluate the mask progressively within the loop to ensure statistical calculations (like quantiles) match the behavior of sequential row removal.
