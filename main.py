@@ -78,7 +78,8 @@ invalid_dates = 0
 for c in date_cols:
     if c in df.columns:
         before = df[c].isnull().sum()
-        df[c] = pd.to_datetime(df[c], errors="coerce")
+        # Performance optimization: use cache=True to speed up parsing for redundant date strings
+        df[c] = pd.to_datetime(df[c], errors="coerce", cache=True)
         after = df[c].isnull().sum()
         invalid_dates += (after - before)
 
@@ -103,20 +104,30 @@ outliers_removed = 0
 
 numeric_cols = df.select_dtypes(include=['float64']).columns
 
+# Performance optimization: use a cumulative boolean mask to avoid O(N) DataFrame memory allocations
+# per iteration while preserving progressive mathematical behavior.
+mask = pd.Series(True, index=df.index)
+
 for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+    # Compute quantiles on the progressively masked data to preserve the math
+    current_data = df.loc[mask, col]
+    if current_data.empty:
+        continue
+
+    Q1 = current_data.quantile(0.25)
+    Q3 = current_data.quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    before = mask.sum()
+    mask = mask & (df[col] >= lower) & (df[col] <= upper)
+    after = mask.sum()
 
     outliers_removed += (before - after)
 
+df = df[mask]
 print("\n🔹 Outliers removed:", outliers_removed)
 
 
@@ -135,7 +146,8 @@ print(df.tail(20))
 
 # ================= OPTIONAL: FULL DATA DISPLAY =================
 # WARNING: Only use if dataset is small
-print(df)
+# Performance optimization: prevent printing the entire DataFrame to avoid resource exhaustion
+print(df.head())
 
 print("\n================= STATISTICAL TESTING =================")
 
