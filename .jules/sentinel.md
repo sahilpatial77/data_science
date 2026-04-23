@@ -1,0 +1,4 @@
+## 2024-03-21 - Prevent Terminal/Memory Overload (DoS)
+**Vulnerability:** Found an unrestricted `print(df)` call for displaying the full DataFrame. With very large CSV files, this can cause terminal hanging, system resource exhaustion, or memory exhaustion (a localized DoS risk).
+**Learning:** Development conveniences (like printing the entire dataset to inspect it) can become performance or security bottlenecks if the data grows unexpectedly large. The warning comment above it showed awareness but not enforcement.
+**Prevention:** Always bound debug outputs or unbounded data inspection calls (e.g., use `.head()`, limit query results, or paginate). Never rely on a developer "knowing better" when automated constraints can be enforced natively.

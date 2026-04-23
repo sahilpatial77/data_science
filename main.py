@@ -134,8 +134,8 @@ print(df.tail(20))
 
 
 # ================= OPTIONAL: FULL DATA DISPLAY =================
-# WARNING: Only use if dataset is small
-print(df)
+# SECURITY CONCERN: Prevent resource exhaustion/DoS from large datasets
+print(df.head(100)) # Bounded output to prevent terminal hang/memory overload
 
 print("\n================= STATISTICAL TESTING =================")
 
