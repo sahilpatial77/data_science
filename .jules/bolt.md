@@ -1,0 +1,3 @@
+## 2024-03-24 - Avoid O(N) DataFrame memory allocations in loops
+**Learning:** In pandas, sequentially modifying DataFrames within loops (e.g., `df = df[condition]`) triggers O(N) memory allocations repeatedly, causing performance bottlenecks, especially for large datasets.
+**Action:** Use a single cumulative boolean mask (`mask = mask & condition`) and filter the DataFrame once outside the loop (`df = df[mask]`) to avoid reallocation overhead. When progressive filtering is intended, compute metrics (like quantiles) on the masked data (`df.loc[mask, col]`) within the loop.
