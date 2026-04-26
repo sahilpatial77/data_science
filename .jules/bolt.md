@@ -1,0 +1,3 @@
+## 2025-04-26 - Pandas Outlier Removal O(N) Reallocation Bottleneck
+**Learning:** In Pandas, sequentially evaluating and replacing a DataFrame inside a loop (`df = df[...]`) for outlier removal results in multiple O(N) memory allocations, degrading performance significantly on large datasets.
+**Action:** Use a cumulative boolean mask (`mask = pd.Series(True, index=df.index)`) updated iteratively (`mask &= ...`), and calculate progressive thresholds via `.loc[mask, col]`. Apply the single mask at the end (`df = df[mask]`) to optimize performance and prevent unnecessary reallocations while preserving behavior.
