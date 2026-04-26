@@ -1,0 +1,3 @@
+## 2024-06-25 - Boolean Masks for Memory Optimization
+**Learning:** Sequential DataFrame filtering in a loop causes O(N) memory allocation per iteration. Using cumulative boolean masks and calculating on `df.loc[mask, col]` is a better way to optimize performance without changing mathematical behaviors.
+**Action:** Always prefer computing on boolean masks cumulatively inside a loop instead of overwriting the dataframe over and over.
