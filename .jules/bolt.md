@@ -1,0 +1,3 @@
+## 2024-05-23 - Outlier Removal Masking
+**Learning:** Sequential DataFrame filtering in a loop (`df = df[condition]`) allocates memory for a new DataFrame on each iteration, causing significant O(N) memory allocation overhead in pandas.
+**Action:** Use a cumulative boolean mask (`mask = mask & condition`) and compute quantiles on the progressively masked data (`df.loc[mask, col]`) to preserve progressive mathematical behavior while avoiding intermediate DataFrame allocations. Apply the final mask once at the end.
