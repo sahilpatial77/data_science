@@ -135,7 +135,7 @@ print(df.tail(20))
 
 # ================= OPTIONAL: FULL DATA DISPLAY =================
 # WARNING: Only use if dataset is small
-print(df)
+print(df.head(100))
 
 print("\n================= STATISTICAL TESTING =================")
 
