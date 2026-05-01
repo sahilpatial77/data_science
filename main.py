@@ -78,7 +78,8 @@ invalid_dates = 0
 for c in date_cols:
     if c in df.columns:
         before = df[c].isnull().sum()
-        df[c] = pd.to_datetime(df[c], errors="coerce")
+        # ⚡ Bolt: Cache=True significantly speeds up parsing when there are many duplicate dates
+        df[c] = pd.to_datetime(df[c], errors="coerce", cache=True)
         after = df[c].isnull().sum()
         invalid_dates += (after - before)
 
@@ -102,20 +103,24 @@ if "lat" in df.columns and "lon" in df.columns:
 outliers_removed = 0
 
 numeric_cols = df.select_dtypes(include=['float64']).columns
+mask = pd.Series(True, index=df.index)
 
 for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+    # ⚡ Bolt: Compute quantiles on progressively masked data to preserve sequential filtering behavior,
+    # while accumulating boolean masks to avoid O(N) memory allocations from recreating the DataFrame
+    col_data = df.loc[mask, col]
+    Q1 = col_data.quantile(0.25)
+    Q3 = col_data.quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    mask = mask & (df[col] >= lower) & (df[col] <= upper)
 
-    outliers_removed += (before - after)
+before_total = df.shape[0]
+df = df[mask]
+outliers_removed = before_total - df.shape[0]
 
 print("\n🔹 Outliers removed:", outliers_removed)
 
