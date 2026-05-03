@@ -1,0 +1,10 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# Environments
+.env
+
+# Sensitive datasets
+*.csv
+crime dataset.csv
