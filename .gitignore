@@ -1,0 +1,5 @@
+*.csv
+crime dataset.csv
+.env
+__pycache__/
+*.py[cod]
