@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimizing Pandas Outlier Removal
+**Learning:** In pandas, switching from sequential DataFrame filtering to a simple cumulative boolean mask for outlier removal changes the underlying mathematical behavior. To avoid O(N) DataFrame memory allocations while preserving progressive filtering behavior, evaluate boolean masks cumulatively and compute quantiles on the progressively masked data (e.g., `df.loc[mask, col]`).
+**Action:** Prefer evaluating boolean masks cumulatively rather than sequentially modifying DataFrames within loops to avoid memory allocation overhead, and use `.loc` with the mask to compute subsequent metrics correctly.
