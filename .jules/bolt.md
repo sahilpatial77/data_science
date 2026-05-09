@@ -1,0 +1,3 @@
+## 2024-05-10 - O(N) DataFrame Allocations in Progressive Filtering Loops
+**Learning:** Sequential DataFrame filtering loops (e.g., `df = df[condition]`) cause expensive O(N) full DataFrame memory allocations on every iteration. However, simply switching to a single evaluated boolean mask changes the underlying mathematical behavior if thresholds (like quantiles) depend on previously filtered data.
+**Action:** To optimize performance while preserving progressive filtering behavior, use a cumulative boolean mask (e.g., `valid_mask &= condition`) and compute thresholds on progressively masked data (e.g., `current_data = df.loc[valid_mask, col]`). Apply the final mask outside the loop.
