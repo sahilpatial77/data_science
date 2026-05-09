@@ -1,0 +1,10 @@
+# Sensitive datasets
+*.csv
+crime dataset.csv
+
+# Standard Python compilation artifacts
+__pycache__/
+*.pyc
+
+# Environment files
+.env
