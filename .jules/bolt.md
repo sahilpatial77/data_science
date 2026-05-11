@@ -1,0 +1,3 @@
+## 2024-05-11 - Overhead of Sequential DataFrame Filtering
+**Learning:** In pandas, sequentially modifying a DataFrame within a loop (e.g., `df = df[condition]`) causes expensive O(N) memory allocations per iteration. However, naively replacing this with a single boolean mask evaluation changes the mathematical behavior because quantiles depend on the progressively filtered data.
+**Action:** To optimize performance while preserving progressive filtering behavior, evaluate boolean masks cumulatively (`mask = mask & condition`) and compute quantiles on the progressively masked data (`df.loc[mask, col]`).
