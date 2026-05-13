@@ -1,0 +1,3 @@
+## 2024-06-25 - Pandas Outlier Filtering Allocations
+**Learning:** Sequential DataFrame filtering inside loops causes O(N) memory allocation overhead for each iteration. However, switching to a simple cumulative boolean mask without updating the source data changes the underlying mathematical behavior of progressive quantile calculation.
+**Action:** Evaluate boolean masks cumulatively and compute quantiles on progressively masked data (e.g., `df.loc[mask, col]`) to avoid allocations while preserving progressive filtering behavior.
