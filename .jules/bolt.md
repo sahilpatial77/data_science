@@ -1,0 +1,3 @@
+## 2024-10-24 - Progressive Outlier Removal Overhead
+**Learning:** Sequential DataFrame filtering for outlier removal causes repeated O(N) memory allocations. Switching to a simple boolean mask changes mathematical behavior because subsequent quantiles need to be computed on the already-filtered data.
+**Action:** To optimize performance without altering behavior, use a cumulative boolean mask and compute quantiles on the progressively masked data (e.g., `df.loc[mask, col]`).
