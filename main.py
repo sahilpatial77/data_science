@@ -135,7 +135,7 @@ print(df.tail(20))
 
 # ================= OPTIONAL: FULL DATA DISPLAY =================
 # WARNING: Only use if dataset is small
-print(df)
+# print(df) # Removed due to potential Denial of Service (DoS) risk
 
 print("\n================= STATISTICAL TESTING =================")
 
