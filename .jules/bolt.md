@@ -1,0 +1,3 @@
+## 2024-05-18 - Pandas Outlier Removal Optimization
+**Learning:** Repeatedly filtering a DataFrame inside a loop (`df = df[...]`) forces Pandas to allocate new memory and copy the entire DataFrame (including all columns) on every iteration.
+**Action:** Use a cumulative boolean mask (`mask = mask & col_mask`) so memory is only allocated for a single boolean column during the loop, and the heavy DataFrame copy is only performed once at the very end. When calculating metrics like quantiles inside the loop, calculate them on the progressively filtered data (`df.loc[mask, col]`) to maintain exact functional equivalence.
