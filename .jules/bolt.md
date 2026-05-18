@@ -1,0 +1,3 @@
+## 2024-05-24 - Progressive Filtering Memory Allocation
+**Learning:** In pandas, switching from sequential DataFrame filtering to a simple cumulative boolean mask for outlier removal changes the underlying mathematical behavior, and sequential filtering causes O(N) DataFrame memory allocations. To optimize performance while preserving progressive filtering behavior, evaluate boolean masks cumulatively and compute quantiles on the progressively masked data (e.g., df.loc[mask, col]).
+**Action:** Use a cumulative boolean mask and update it during loops, applying it to the DataFrame only once at the end.
