@@ -1,0 +1,3 @@
+## 2024-05-24 - Cumulative boolean masks for progressive filtering
+**Learning:** Sequential DataFrame filtering in a loop causes O(N) memory allocation overhead. A cumulative boolean mask avoids reallocation but changes mathematical behavior if quantiles aren't evaluated progressively.
+**Action:** Use a cumulative boolean mask and compute quantiles on the progressively masked data (e.g., `df.loc[mask, col]`) to preserve behavior while optimizing performance.

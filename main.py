@@ -103,20 +103,27 @@ outliers_removed = 0
 
 numeric_cols = df.select_dtypes(include=['float64']).columns
 
+# ⚡ Bolt Optimization: Use a cumulative boolean mask to avoid O(N) memory
+# allocations from sequential DataFrame filtering, while preserving progressive
+# filtering behavior by evaluating quantiles on progressively masked data.
+valid_mask = pd.Series(True, index=df.index)
+
 for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+    masked_col = df.loc[valid_mask, col]
+    Q1 = masked_col.quantile(0.25)
+    Q3 = masked_col.quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    before_count = valid_mask.sum()
+    valid_mask = valid_mask & (df[col] >= lower) & (df[col] <= upper)
+    after_count = valid_mask.sum()
 
-    outliers_removed += (before - after)
+    outliers_removed += (before_count - after_count)
 
+df = df[valid_mask]
 print("\n🔹 Outliers removed:", outliers_removed)
 
 
