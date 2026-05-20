@@ -1,0 +1,3 @@
+## 2024-06-12 - Progressive Filtering vs Cumulative Masking in pandas
+**Learning:** When trying to eliminate O(N) memory allocation overhead from sequential DataFrame filtering in loops (e.g., outlier removal), switching to a simple cumulative boolean mask changes the mathematical result if subsequent loop calculations (like quantiles) depend on the progressively filtered data.
+**Action:** Always verify if iterative operations have data dependencies. To optimize while preserving behavior, compute subsequent values (e.g., quantiles) on the progressively masked data using `df.loc[mask, col]`, then update the mask cumulatively.
