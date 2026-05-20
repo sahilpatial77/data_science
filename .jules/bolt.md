@@ -1,0 +1,3 @@
+## 2024-05-20 - Outlier Removal Mask Optimization
+**Learning:** In pandas, switching from sequential DataFrame filtering to a simple cumulative boolean mask for outlier removal changes the underlying mathematical behavior. Doing DataFrame reallocations in a loop is slow (O(N) memory allocation overhead).
+**Action:** Evaluate boolean masks cumulatively and compute quantiles on the progressively masked data (e.g., df.loc[mask, col]) to preserve behavior while avoiding repeated allocations.
