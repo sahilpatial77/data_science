@@ -1,0 +1,3 @@
+## 2024-05-26 - Avoiding O(N) DataFrame Allocations in Progressive Filtering
+**Learning:** Switching from sequential DataFrame filtering to a cumulative boolean mask changes underlying mathematical behavior for progressive outlier removal, but calculating quantiles on `df.loc[mask, col]` maintains accuracy while preventing O(N) memory reallocations per column.
+**Action:** Always prefer evaluating boolean masks cumulatively and applying them once, using `df.loc[]` if intermediate progressive calculations are required.
