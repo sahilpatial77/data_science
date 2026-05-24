@@ -1,0 +1,3 @@
+## 2025-02-14 - Optimize DataFrame Filtering
+**Learning:** Sequential DataFrame filtering in loops causes O(N) memory allocations per iteration. To avoid this overhead while preserving progressive filtering mathematical behavior, use a cumulative boolean mask and compute quantiles on `df.loc[mask, col]`.
+**Action:** Always prefer evaluating boolean masks cumulatively rather than repeatedly modifying DataFrames within loops.
