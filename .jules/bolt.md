@@ -1,0 +1,3 @@
+## 2024-05-24 - Progressive Masking for DataFrame Filtering
+**Learning:** In pandas, switching from sequential DataFrame filtering to a simple cumulative boolean mask for outlier removal changes the underlying mathematical behavior if quantiles aren't computed on the masked data. Evaluating boolean masks cumulatively and computing quantiles on progressively masked data avoids O(N) memory allocations while preserving progressive filtering behavior.
+**Action:** Apply cumulative boolean masks instead of iterative DataFrame reassignments and calculate quantiles using the progressively updated mask.
