@@ -1,0 +1,3 @@
+## 2024-05-24 - Cumulative Boolean Masks in Pandas
+**Learning:** Sequential DataFrame filtering inside loops causes O(N) memory allocation overhead due to recreating DataFrames. Modifying the loop to use a cumulative boolean mask (e.g., df.loc[mask, col]) preserves progressive filtering mathematical behavior while preventing the expensive reallocation of DataFrames.
+**Action:** Use cumulative boolean masks and compute operations on progressively masked data instead of modifying the DataFrame in each iteration when filtering inside loops.
