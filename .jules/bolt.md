@@ -1,0 +1,3 @@
+## 2024-05-23 - Cumulative Boolean Masks
+**Learning:** In pandas, switching from sequential DataFrame filtering to a simple cumulative boolean mask for outlier removal changes the underlying mathematical behavior. However, to optimize performance by avoiding O(N) DataFrame memory allocations while preserving progressive filtering behavior, evaluate boolean masks cumulatively and compute quantiles on the progressively masked data.
+**Action:** Use a cumulative boolean mask (e.g., df.loc[mask, col]) when filtering data in loops instead of creating new DataFrame copies sequentially.
