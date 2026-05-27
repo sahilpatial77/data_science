@@ -1,0 +1,3 @@
+## 2024-05-24 - Progressive Filtering vs Cumulative Masking in Pandas
+**Learning:** When optimizing sequential DataFrame filtering in pandas, simply switching to a single evaluated boolean mask changes the mathematical result because subsequent quantiles are no longer calculated on the progressively filtered data.
+**Action:** To avoid O(N) memory allocation overhead while preserving progressive filtering behavior, evaluate boolean masks cumulatively (`mask &= condition`) and calculate statistics (like quantiles) on the progressively masked data using `.loc` (e.g., `df.loc[mask, col].quantile()`).
