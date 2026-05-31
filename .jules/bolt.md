@@ -1,0 +1,3 @@
+## 2024-05-24 - Pandas Outlier Removal Optimization
+**Learning:** Iteratively filtering a DataFrame inside a loop triggers expensive O(N) memory allocations per iteration. Using a single cumulative boolean mask avoids this overhead. However, when switching to a mask, you must compute quantiles on the progressively masked data (e.g., `df.loc[mask, col].quantile()`) to preserve the correct mathematical behavior of sequential filtering.
+**Action:** Use cumulative boolean masks `mask &= condition` instead of `df = df[condition]` inside loops, and evaluate intermediate statistics on `df.loc[mask]`.
