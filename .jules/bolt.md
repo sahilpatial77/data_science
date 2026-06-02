@@ -1,0 +1,3 @@
+## 2026-06-02 - Cumulative Masking Optimization
+**Learning:** In pandas, switching from sequential DataFrame filtering to a simple cumulative boolean mask for outlier removal changes the underlying mathematical behavior. To optimize performance (avoiding O(N) DataFrame memory allocations) while preserving progressive filtering behavior, evaluate boolean masks cumulatively and compute quantiles on the progressively masked data (e.g., `df.loc[mask, col]`).
+**Action:** Always evaluate boolean masks cumulatively rather than sequentially modifying DataFrames within loops to avoid O(N) memory allocation overhead.
