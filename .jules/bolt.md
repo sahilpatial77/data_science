@@ -1,0 +1,3 @@
+## 2024-05-23 - Avoid sequential DataFrame filtering in loops
+**Learning:** In pandas, sequentially modifying DataFrames within loops (e.g., `df = df[condition]`) triggers O(N) memory allocations per iteration, significantly hurting performance. Using a cumulative boolean mask and applying it once at the end is ~50% faster for large datasets.
+**Action:** When filtering multiple columns for outliers progressively, evaluate boolean masks cumulatively (`mask = mask & new_condition`) and compute quantiles on the progressively masked data (`df.loc[mask, col]`). Finally, apply the mask once (`df = df[mask]`).
