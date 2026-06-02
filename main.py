@@ -99,23 +99,23 @@ if "lat" in df.columns and "lon" in df.columns:
 
 
 # ================= 9. OUTLIER REMOVAL =================
-outliers_removed = 0
-
 numeric_cols = df.select_dtypes(include=['float64']).columns
+mask = pd.Series(True, index=df.index)
 
 for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+    col_data = df.loc[mask, col]
+    Q1 = col_data.quantile(0.25)
+    Q3 = col_data.quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    mask = mask & (df[col] >= lower) & (df[col] <= upper)
 
-    outliers_removed += (before - after)
+before_outliers = df.shape[0]
+df = df[mask]
+outliers_removed = before_outliers - df.shape[0]
 
 print("\n🔹 Outliers removed:", outliers_removed)
 
