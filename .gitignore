@@ -1,0 +1,10 @@
+# Environments
+.env
+
+# Datasets
+*.csv
+crime dataset.csv
+
+# Python artifacts
+__pycache__/
+*.pyc
