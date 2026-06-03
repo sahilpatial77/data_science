@@ -1,0 +1,3 @@
+## 2024-05-24 - Avoiding DataFrame reallocation in progressive loops
+**Learning:** In pandas, switching from sequential DataFrame filtering (`df = df[cond]`) inside a loop to a single boolean mask evaluation at the end changes the mathematical behavior of the progressive filtering (e.g. quantiles recalculated at each step).
+**Action:** To optimize performance by avoiding O(N) DataFrame memory allocations while preserving progressive filtering behavior, evaluate boolean masks cumulatively and compute quantiles on the progressively masked data (e.g., `df.loc[mask, col]`) rather than on the original dataset, updating the mask at each step.
