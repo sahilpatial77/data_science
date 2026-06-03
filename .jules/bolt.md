@@ -1,0 +1,3 @@
+## 2024-05-24 - Progressive Masking in Pandas Outlier Removal
+**Learning:** When optimizing iterative DataFrame filtering (like removing outliers across multiple columns), switching naively from `df = df[condition]` to a single accumulated boolean mask `mask &= condition` alters mathematical outcomes if the condition relies on statistics (like quantiles) computed on the *current* dataframe state.
+**Action:** To optimize performance (avoiding O(N) DataFrame memory allocations) while preserving progressive filtering behavior, evaluate boolean masks cumulatively and compute quantiles on the progressively masked data (e.g., `df.loc[mask, col]`).
