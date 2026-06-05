@@ -1,0 +1,7 @@
+*.csv
+crime dataset.csv
+__pycache__/
+*.pyc
+.env
+dummy_data.py
+test_perf.py
