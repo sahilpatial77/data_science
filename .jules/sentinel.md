@@ -1,0 +1,4 @@
+## 2024-06-06 - Initial Codebase Audit: Missing .gitignore
+**Vulnerability:** The repository entirely lacked a `.gitignore` file, making it highly susceptible to accidental commits of sensitive information such as `.env` files, credentials, and raw datasets.
+**Learning:** Even simple single-file scripts require foundational repository protections. A missing `.gitignore` is a silent vulnerability waiting to happen when developers inevitably create `.env` files for configuration.
+**Prevention:** Always verify the existence of a basic, environment-appropriate `.gitignore` file (e.g., ignoring `.env`, OS artifacts, and compiled files) immediately upon cloning or establishing a new codebase.
