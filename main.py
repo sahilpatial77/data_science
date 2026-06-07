@@ -57,7 +57,8 @@ df[num_cols] = df[num_cols].fillna(df[num_cols].mean())
 
 # categorical
 for col in df.select_dtypes(include='string'):
-    if df[col].isnull().sum() > 0:
+    # OPTIMIZATION: Use .hasnans instead of .isnull().sum() > 0 to short-circuit and avoid full column traversal
+    if df[col].hasnans:
         df[col] = df[col].fillna(df[col].mode()[0])
 
 missing_after = df.isnull().sum().sum()
