@@ -1,0 +1,3 @@
+## 2024-06-11 - Optimize Outlier Removal using Cumulative Masking
+**Learning:** In pandas, looping over columns to apply filters sequentially causes O(N) memory allocations per column because it creates intermediate DataFrames for each filtering step (`df = df[cond]`).
+**Action:** Use a cumulative boolean mask (`mask = pd.Series(True, index=df.index)`) and progressively update it (`mask = mask & col_mask`). To ensure correct iterative outlier calculation bounds, apply the mask to the column during calculation (`col_data = df.loc[mask, col]`), and only filter the DataFrame once at the very end (`df = df[mask]`).
