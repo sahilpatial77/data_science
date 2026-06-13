@@ -1,0 +1,3 @@
+## 2023-10-24 - Pandas Outlier Removal Optimization
+**Learning:** Sequential filtering and copying of DataFrames within loops (e.g., `df = df[(df[col] >= lower)]`) causes O(N) memory allocations per iteration, severely impacting performance.
+**Action:** When filtering out outliers across multiple columns, initialize a boolean mask (`mask = pd.Series(True, index=df.index)`), cumulatively update the mask using logical operators (`mask &= condition`), compute subsequent statistics only on the remaining valid data (`df.loc[mask, col]`), and perform a single DataFrame filter operation at the end (`df = df[mask]`).
