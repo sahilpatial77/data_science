@@ -1,0 +1,3 @@
+## 2024-06-16 - Pandas Outlier Removal Optimization
+**Learning:** Sequential boolean masking on a Pandas DataFrame (`df = df[condition]`) within a loop causes O(N) memory allocations, data copying, and garbage collection on each iteration, creating a massive performance bottleneck on large datasets.
+**Action:** Instead of dynamically shrinking the DataFrame, maintain a cumulative boolean mask (`mask &= condition`) and slice the DataFrame only once at the end of the operation. This evaluates the conditions in O(N) time and drastically reduces memory overhead. For quantiles, use `df.loc[mask, col]` to ensure accuracy against the progressive subset.
