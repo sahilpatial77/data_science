@@ -1,0 +1,3 @@
+## $(date +%Y-%m-%d) - Optimize pandas Sequential Filtering
+**Learning:** Sequential filtering of large DataFrames inside a loop (e.g., `df = df[condition]`) triggers repeated memory allocations and data copying for all columns, causing significant performance overhead and unnecessary intermediate DataFrames.
+**Action:** When filtering across multiple columns iteratively, optimize by building a boolean mask cumulatively (e.g., `mask &= col_mask`) and calculating metrics on progressively masked columns (`df.loc[mask, col]`). Finally, perform the filtering operation exactly once outside the loop (`df = df[mask]`).
