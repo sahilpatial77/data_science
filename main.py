@@ -7,10 +7,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
+import sys
 
 
 # ================= LOAD DATA =================
-df = pd.read_csv("crime dataset.csv")
+try:
+    df = pd.read_csv("crime dataset.csv")
+except Exception as e:
+    print("Error: Failed to load data file. Ensure 'crime dataset.csv' exists and is readable.")
+    sys.exit(1)
 
 
 # ================= INITIAL REPORT =================
