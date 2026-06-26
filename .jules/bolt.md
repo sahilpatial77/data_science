@@ -1,0 +1,3 @@
+## 2025-03-09 - Sequential DataFrame Filtering Bottleneck
+**Learning:** Sequential DataFrame filtering inside loops (`df = df[condition]`) triggers expensive O(N) memory reallocations on each iteration, causing significant overhead in data processing pipelines (like iterative outlier removal).
+**Action:** Replace sequential filtering with a cumulative boolean mask (`mask &= condition`) to evaluate the inclusion criteria iteratively without allocating new DataFrames, applying the final filter only once at the end. Use `.loc[mask, col]` if intermediate loop logic depends on the progressively filtered subset.
