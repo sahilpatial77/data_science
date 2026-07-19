@@ -99,23 +99,27 @@ if "lat" in df.columns and "lon" in df.columns:
 
 
 # ================= 9. OUTLIER REMOVAL =================
+# Bolt Optimization: Avoid expensive O(N) allocations from sequential DataFrame filtering in loop.
+# Use a cumulative boolean mask and filter once at the end, while calculating metrics dynamically.
 outliers_removed = 0
 
 numeric_cols = df.select_dtypes(include=['float64']).columns
+mask = pd.Series(True, index=df.index)
 
 for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+    active_data = df.loc[mask, col]
+    Q1 = active_data.quantile(0.25)
+    Q3 = active_data.quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    mask &= (df[col] >= lower) & (df[col] <= upper)
 
-    outliers_removed += (before - after)
+before = df.shape[0]
+df = df[mask]
+outliers_removed = before - df.shape[0]
 
 print("\n🔹 Outliers removed:", outliers_removed)
 
