@@ -103,19 +103,23 @@ outliers_removed = 0
 
 numeric_cols = df.select_dtypes(include=['float64']).columns
 
+# ⚡ Bolt Optimization: Use a cumulative boolean mask to prevent expensive O(N) memory allocations in the loop
+mask = pd.Series(True, index=df.index)
 for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+    Q1 = df.loc[mask, col].quantile(0.25)
+    Q3 = df.loc[mask, col].quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    before = mask.sum()
+    mask &= (df[col] >= lower) & (df[col] <= upper)
+    after = mask.sum()
 
     outliers_removed += (before - after)
+
+df = df[mask]
 
 print("\n🔹 Outliers removed:", outliers_removed)
 
