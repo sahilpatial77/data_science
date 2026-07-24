@@ -1,0 +1,3 @@
+## 2024-07-24 - Optimize outlier removal filtering loop
+**Learning:** Sequential DataFrame filtering inside loops (df = df[...]) is a major performance bottleneck due to O(N) memory allocations per iteration.
+**Action:** Use a cumulative boolean mask (mask &= ...) and filter once at the end. For dynamic thresholds (e.g., quantiles), calculate them strictly on the progressively active subset using df.loc[mask, col] within the loop.
