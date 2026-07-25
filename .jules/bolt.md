@@ -1,0 +1,3 @@
+## 2024-10-24 - Sequential DataFrame Filtering Anti-pattern
+**Learning:** The main data pipeline uses sequential DataFrame filtering (`df = df[...]`) within a loop for outlier removal, causing expensive O(N) memory allocations per iteration which drastically degrades performance.
+**Action:** Use a cumulative boolean mask (`mask &= condition`) and filter the DataFrame once at the end. To prevent functional regressions, calculate intermediate values dynamically using `df.loc[mask, col]`.
