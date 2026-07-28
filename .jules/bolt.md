@@ -1,0 +1,3 @@
+## 2024-07-27 - Optimize DataFrame Filtering
+**Learning:** Sequential DataFrame filtering (df = df[...]) within loops causes expensive O(N) memory allocations, so we must calculate intermediate values dynamically on the active subset using df.loc[mask, col] within the loop.
+**Action:** Use a cumulative boolean mask (mask &= ...) and filter once at the end to improve performance and prevent regressions.
