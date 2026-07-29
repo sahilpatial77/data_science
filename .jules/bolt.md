@@ -1,0 +1,3 @@
+## 2024-07-27 - Sequential DataFrame Filtering in Pandas Loops
+**Learning:** Repeatedly filtering DataFrames in loops causes expensive O(N) memory allocations and triggers severe performance bottlenecks, as applying the filter sequentially rather than cumulatively creates intermediate copies of the dataset during each iteration.
+**Action:** Use a cumulative boolean mask and apply the filter only once at the end, calculating intermediate metrics on the progressively filtered subset using df.loc[mask, col] within the loop to ensure identical behavior.
