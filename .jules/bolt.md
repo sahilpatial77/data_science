@@ -1,0 +1,3 @@
+## 2024-07-30 - Pandas Sequential Filtering Bottleneck
+**Learning:** Sequential DataFrame filtering (`df = df[...]`) within loops causes expensive O(N) memory allocations and unnecessary data copying, significantly slowing down data processing. However, when using a cumulative boolean mask to avoid this, intermediate values (like quantiles) must be calculated dynamically on the active subset (`df.loc[mask, col]`) to prevent functional regressions.
+**Action:** Use a cumulative boolean mask (`mask &= ...`) and filter once at the end. Calculate intermediate values on the progressively filtered dataset using `.loc`.
