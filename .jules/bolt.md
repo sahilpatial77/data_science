@@ -1,0 +1,3 @@
+## 2024-10-24 - Preventing O(N) memory allocations in Pandas Loops
+**Learning:** In pandas scripts, avoid sequential DataFrame filtering (df = df[...]) within loops, as it causes expensive O(N) memory allocations.
+**Action:** Use a cumulative boolean mask (mask &= ...) and filter once at the end, calculating intermediate values dynamically on the active subset using df.loc[mask, col] to prevent functional regressions.
