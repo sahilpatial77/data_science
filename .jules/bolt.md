@@ -1,0 +1,3 @@
+## 2024-05-18 - [Optimization of Sequential DataFrame Filtering]
+**Learning:** Sequential filtering of a Pandas DataFrame inside a loop (`df = df[...]`) triggers expensive O(N) memory allocations on each iteration. In pandas scripts, avoid sequential DataFrame filtering (`df = df[...]`) within loops, as it causes expensive O(N) memory allocations.
+**Action:** Use a cumulative boolean mask (`mask &= ...`) and filter once at the end. Crucially, to prevent functional regressions, calculate intermediate values dynamically on the active subset using `df.loc[mask, col]` within the loop, ensuring subsequent calculations account for the progressively filtered dataset.
