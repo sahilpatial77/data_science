@@ -102,20 +102,24 @@ if "lat" in df.columns and "lon" in df.columns:
 outliers_removed = 0
 
 numeric_cols = df.select_dtypes(include=['float64']).columns
+mask = pd.Series(True, index=df.index)
+before_total = df.shape[0]
 
 for col in numeric_cols:
-    Q1 = df[col].quantile(0.25)
-    Q3 = df[col].quantile(0.75)
+    # ⚡ Bolt: Calculate quantiles dynamically on active subset to avoid sequential filtering memory allocations
+    current_col = df.loc[mask, col]
+    Q1 = current_col.quantile(0.25)
+    Q3 = current_col.quantile(0.75)
     IQR = Q3 - Q1
 
     lower = Q1 - 1.5 * IQR
     upper = Q3 + 1.5 * IQR
 
-    before = df.shape[0]
-    df = df[(df[col] >= lower) & (df[col] <= upper)]
-    after = df.shape[0]
+    mask &= (df[col] >= lower) & (df[col] <= upper)
 
-    outliers_removed += (before - after)
+df = df[mask]
+after_total = df.shape[0]
+outliers_removed = before_total - after_total
 
 print("\n🔹 Outliers removed:", outliers_removed)
 
