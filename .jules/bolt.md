@@ -1,0 +1,3 @@
+## 2024-05-24 - Optimizing Pandas Sequential Filtering
+**Learning:** In pandas scripts, sequential DataFrame filtering (df = df[...]) within loops causes expensive O(N) memory allocations and redundant data copies. It is much more efficient to use a cumulative boolean mask and filter once at the end. When doing this, any intermediate calculations must use df.loc[mask, col] to account for the progressively filtered dataset and preserve functional correctness.
+**Action:** Avoid re-assigning dataframes inside loops. Use boolean masks to accumulate filter conditions and apply them in a single operation, keeping in mind to calculate dependent metrics on the masked subset.
