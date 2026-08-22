@@ -1,0 +1,3 @@
+## 2024-07-27 - Optimize Pandas Outlier Removal
+**Learning:** Sequential DataFrame filtering inside loops (e.g., `df = df[...]`) causes expensive O(N) memory allocations and unnecessary data copies. Using a cumulative boolean mask (`mask &= ...`) and applying it once at the end is significantly faster, but intermediate statistics (like quartiles) must be calculated dynamically on the active subset (`df.loc[mask, col]`) to maintain correct functionality.
+**Action:** Always prefer cumulative masks over iterative filtering in Pandas, ensuring dependent calculations utilize the masked subset rather than the full dataframe.
