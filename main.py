@@ -39,9 +39,8 @@ for col in df.select_dtypes(include='string'):
     space_count += df[col].str.startswith(" ").sum()
     space_count += df[col].str.endswith(" ").sum()
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+    # Bolt: Chain string operations to prevent unnecessary intermediate Series allocations
+    df[col] = df[col].str.strip().str.lower().replace("", pd.NA)
 
 print("\n🔹 Spaces cleaned:", space_count)
 
