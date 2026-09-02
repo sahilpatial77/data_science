@@ -35,13 +35,29 @@ df = df.convert_dtypes()
 # ================= 4. CLEAN STRING DATA =================
 space_count = 0
 
-for col in df.select_dtypes(include='string'):
-    space_count += df[col].str.startswith(" ").sum()
-    space_count += df[col].str.endswith(" ").sum()
+# Optimization: map operations over unique values rather than entire columns
+for col in df.select_dtypes(include='string').columns:
+    s = df[col]
+    unique_vals = s.unique()
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+    cleaned = {}
+    col_spaces = 0
+    val_counts = s.value_counts(dropna=False)
+
+    for val in unique_vals:
+        if pd.isna(val):
+            cleaned[val] = pd.NA
+            continue
+
+        val_str = str(val)
+        if val_str.startswith(" "): col_spaces += val_counts[val]
+        if val_str.endswith(" "): col_spaces += val_counts[val]
+
+        c = val_str.strip().lower()
+        cleaned[val] = pd.NA if c == "" else c
+
+    space_count += col_spaces
+    df[col] = s.map(cleaned).astype('string')
 
 print("\n🔹 Spaces cleaned:", space_count)
 
