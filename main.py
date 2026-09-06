@@ -35,13 +35,18 @@ df = df.convert_dtypes()
 # ================= 4. CLEAN STRING DATA =================
 space_count = 0
 
+# ⚡ Bolt Optimization: Use dictionary mapping on unique values for string transformations
+# instead of sequential .str accessors on full columns to significantly improve performance on large DataFrames.
 for col in df.select_dtypes(include='string'):
-    space_count += df[col].str.startswith(" ").sum()
-    space_count += df[col].str.endswith(" ").sum()
+    counts = df[col].value_counts(dropna=True)
+    val_map = {}
+    for val, count in counts.items():
+        if isinstance(val, str):
+            space_count += (val.startswith(" ") + val.endswith(" ")) * count
+            stripped = val.strip()
+            val_map[val] = pd.NA if not stripped else stripped.lower()
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+    df[col] = pd.Series(df[col].astype(object).map(val_map), dtype="string")
 
 print("\n🔹 Spaces cleaned:", space_count)
 
