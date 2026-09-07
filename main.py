@@ -36,12 +36,15 @@ df = df.convert_dtypes()
 space_count = 0
 
 for col in df.select_dtypes(include='string'):
-    space_count += df[col].str.startswith(" ").sum()
-    space_count += df[col].str.endswith(" ").sum()
+    # ⚡ Bolt Optimization: Map string operations over unique values for O(U) instead of O(N) complexity
+    unique_vals = df[col].dropna().unique()
+    val_counts = df[col].value_counts()
+    for v in unique_vals:
+        if v.startswith(" "): space_count += val_counts[v]
+        if v.endswith(" "): space_count += val_counts[v]
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+    mapping = {v: (v.strip().lower() if v.strip() != "" else pd.NA) for v in unique_vals}
+    df[col] = df[col].map(mapping).astype('string')
 
 print("\n🔹 Spaces cleaned:", space_count)
 
