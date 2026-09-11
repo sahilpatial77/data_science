@@ -35,13 +35,25 @@ df = df.convert_dtypes()
 # ================= 4. CLEAN STRING DATA =================
 space_count = 0
 
+# ⚡ BOLT OPTIMIZATION:
+# Replaced sequential .str operations on full columns with a unique value mapping.
+# By computing transformations only on unique values and applying via .map(),
+# we eliminate redundant string processing and reduce multiple O(N) passes to one.
 for col in df.select_dtypes(include='string'):
-    space_count += df[col].str.startswith(" ").sum()
-    space_count += df[col].str.endswith(" ").sum()
+    vc = df[col].value_counts(dropna=False)
+    mapping = {}
+    for val, count in vc.items():
+        if pd.isna(val):
+            continue
+        if val.startswith(" "):
+            space_count += count
+        if val.endswith(" "):
+            space_count += count
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+        stripped = val.strip().lower()
+        mapping[val] = pd.NA if stripped == "" else stripped
+
+    df[col] = df[col].map(mapping).astype('string')
 
 print("\n🔹 Spaces cleaned:", space_count)
 
