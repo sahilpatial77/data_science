@@ -36,12 +36,24 @@ df = df.convert_dtypes()
 space_count = 0
 
 for col in df.select_dtypes(include='string'):
-    space_count += df[col].str.startswith(" ").sum()
-    space_count += df[col].str.endswith(" ").sum()
+    # Optimization: Calculate string transformations and count spaces on unique values only.
+    # Applying the results via a dictionary map is significantly faster than vector string accessors on large datasets with repeating values.
+    unique_counts = df[col].value_counts(dropna=False)
+    mapping = {}
+    for val, count in unique_counts.items():
+        if pd.isna(val):
+            mapping[val] = pd.NA
+            continue
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+        if val.startswith(" "):
+            space_count += count
+        if val.endswith(" "):
+            space_count += count
+
+        cleaned = val.strip().lower()
+        mapping[val] = pd.NA if cleaned == "" else cleaned
+
+    df[col] = df[col].map(mapping).astype('string')
 
 print("\n🔹 Spaces cleaned:", space_count)
 
