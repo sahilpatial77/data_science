@@ -1,0 +1,3 @@
+## 2024-09-05 - Fast string operations in pandas
+**Learning:** When optimizing string operations on large pandas DataFrames with repeating values, computing transformations on \`.unique()\` values using a pure Python dictionary and applying them via \`.map()\` is significantly faster than using sequential \`.str\` accessor methods over entire columns. Also, calculating \`.value_counts()\` and accumulating counts by iterating over unique values in pure Python is faster than applying \`.str\` accessors across the entire column.
+**Action:** Use value_counts() and dictionary mapping for string operations on large dataframes with repeating values.
