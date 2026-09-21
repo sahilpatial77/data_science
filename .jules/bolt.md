@@ -1,0 +1,3 @@
+## 2024-09-05 - [Optimize pandas string operations using dictionaries and map]
+**Learning:** Sequential `.str` accessor methods over entire columns on large pandas DataFrames with repeating values are significantly slower than computing transformations on `.unique()` values using a pure Python dictionary and applying them via `.map()`.
+**Action:** When performing string manipulations on large DataFrames with many duplicate strings, use `.unique()` to extract unique values, process them using standard Python dictionary comprehensions, and then apply the result back with `.map()` to improve performance. Remember to re-cast the series with `.astype('string')` if `pd.NA` mappings introduce downcasting.
