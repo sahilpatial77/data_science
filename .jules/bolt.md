@@ -1,0 +1,3 @@
+## 2024-09-05 - [Optimizing pandas string columns]
+**Learning:** When standardizing large pandas string columns with repeating values (e.g., stripping, lowercasing, space counting), using `.str` accessors across the entire column sequentially is inefficient due to repeated string operations. Calculating `.value_counts()` or `.unique()` and performing the transformations using a pure Python dictionary mapping, then applying it via `.map()` is significantly faster.
+**Action:** When standardizing repetitive pandas string columns, compute `.value_counts()` and a mapping dictionary for `.unique()` values, then apply via `.map()`.
