@@ -1,0 +1,3 @@
+## 2024-09-05 - Optimize Pandas string cleaning with dictionary mapping
+**Learning:** When applying string operations (like strip, lower, and replace) across an entire Pandas DataFrame column, using vectorized `.str` methods on columns with many repeating values is significantly slower than using `.map()` with a dictionary mapping. Calculating `.value_counts()` and applying the string operations only on the unique values before mapping reduces the overhead, significantly improving execution time.
+**Action:** Use `.value_counts()` or `.unique()` along with `.map()` instead of direct `.str` methods when standardizing or modifying text columns with high cardinality or repeated strings.
