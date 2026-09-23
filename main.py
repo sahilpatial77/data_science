@@ -1,6 +1,6 @@
 # ================= FIX BACKEND =================
 import matplotlib
-matplotlib.use('TkAgg')
+matplotlib.use('Agg')
 
 import pandas as pd
 import numpy as np
@@ -36,12 +36,22 @@ df = df.convert_dtypes()
 space_count = 0
 
 for col in df.select_dtypes(include='string'):
-    space_count += df[col].str.startswith(" ").sum()
-    space_count += df[col].str.endswith(" ").sum()
+    unique_counts = df[col].value_counts()
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+    # Calculate spaces using unique values
+    for val, count in unique_counts.items():
+        if isinstance(val, str):
+            if val.startswith(" "):
+                space_count += count
+            if val.endswith(" "):
+                space_count += count
+
+    # Create mapping for transformation
+    mapping = {
+        val: (val.strip().lower() if val.strip().lower() != "" else pd.NA)
+        for val in unique_counts.index if isinstance(val, str)
+    }
+    df[col] = df[col].map(mapping).astype('string')
 
 print("\n🔹 Spaces cleaned:", space_count)
 
@@ -87,7 +97,7 @@ print("\n🔹 Invalid dates:", invalid_dates)
 
 # ================= 8. REMOVE INVALID VALUES =================
 # remove negative ages
-if "vict_age" in df.columns:
+if "vict_age" in df.columns and len(df) > 0:
     invalid_age = (df["vict_age"] < 0).sum()
     df = df[df["vict_age"] >= 0]
     print("\n🔹 Negative ages removed:", invalid_age)
@@ -141,7 +151,7 @@ print("\n================= STATISTICAL TESTING =================")
 
 # ------------------ T-TEST ------------------
 # Example: Compare victim age for two random groups
-if "vict_age" in df.columns:
+if "vict_age" in df.columns and len(df) > 0:
     
     # split dataset into 2 groups randomly
     group1 = df["vict_age"].sample(frac=0.5, random_state=1)
@@ -161,9 +171,9 @@ if "vict_age" in df.columns:
 
 # ------------------ Z-TEST ------------------
 # comparing sample mean with population mean
-if "vict_age" in df.columns:
+if "vict_age" in df.columns and len(df) > 0:
 
-    sample = df["vict_age"].sample(100, random_state=1)
+    sample = df["vict_age"].sample(min(100, len(df)), random_state=1)
     sample_mean = sample.mean()
     population_mean = df["vict_age"].mean()
     std = df["vict_age"].std()
@@ -182,7 +192,7 @@ if "vict_age" in df.columns:
 # ------------------ CORRELATION TEST ------------------
 if "vict_age" in df.columns and "time_occ" in df.columns:
 
-    corr, p_val = stats.pearsonr(df["vict_age"], df["time_occ"])
+    corr, p_val = stats.pearsonr(df["vict_age"], df["time_occ"]) if len(df) > 1 else (np.nan, np.nan) if len(df) > 1 else (np.nan, np.nan)
 
     print("\n🔹 CORRELATION TEST (Age vs Time)")
     print("Correlation:", corr)
@@ -198,7 +208,7 @@ if "vict_age" in df.columns and "time_occ" in df.columns:
 plt.figure(figsize=(10,7))
 num_df = df.select_dtypes(include=['float64'])
 
-if num_df.shape[1] >= 2:
+if num_df.shape[1] >= 2 and len(num_df) > 1:
     sns.heatmap(num_df.corr(), cmap="coolwarm")
     plt.title("Correlation Heatmap")
 
@@ -208,7 +218,7 @@ plt.close()
 
 
 # ================= (2) HISTOGRAM =================
-if "vict_age" in df.columns:
+if "vict_age" in df.columns and len(df) > 0:
     plt.figure()
     sns.histplot(df["vict_age"], bins=30)
     plt.title("Victim Age Distribution")
@@ -217,7 +227,7 @@ if "vict_age" in df.columns:
 
 
 # ================= (3) BAR =================
-if "crm_cd_desc" in df.columns:
+if "crm_cd_desc" in df.columns and len(df) > 0:
     plt.figure()
     top10 = df["crm_cd_desc"].value_counts().head(10)
     sns.barplot(x=top10.values, y=top10.index)
@@ -227,7 +237,7 @@ if "crm_cd_desc" in df.columns:
 
 
 # ================= (4) LINE =================
-if "date_occ" in df.columns:
+if "date_occ" in df.columns and len(df) > 0:
     plt.figure()
     df_time = df[["date_occ"]].copy()
     df_time["month"] = df_time["date_occ"].dt.to_period("M").dt.to_timestamp()
@@ -242,7 +252,7 @@ if "date_occ" in df.columns:
 
 
 # ================= (5) SCATTER =================
-if "time_occ" in df.columns and "vict_age" in df.columns:
+if "time_occ" in df.columns and "vict_age" in df.columns and len(df) > 0:
     plt.figure()
     sns.scatterplot(data=df, x="time_occ", y="vict_age", alpha=0.3)
     plt.title("Age vs Time")
