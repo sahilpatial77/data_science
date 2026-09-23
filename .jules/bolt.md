@@ -1,0 +1,3 @@
+## 2025-01-20 - [Performance Optimization in pandas String Cleaning]
+**Learning:** Applying string methods directly to a large pandas DataFrame column (e.g., `.str.strip()`, `.str.lower()`) can be slow. Calculating `.value_counts()` and using a dictionary mapping (`.map()`) can be significantly faster when the number of unique string values is small compared to the total number of rows. This avoids redundant calculations for repeating strings.
+**Action:** When cleaning string columns in pandas, evaluate if the column has a low cardinality (few unique values relative to size). If so, use `.value_counts()` and `.map()` instead of direct `.str` accessors for a performance boost.
