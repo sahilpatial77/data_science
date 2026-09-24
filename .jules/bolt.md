@@ -1,0 +1,3 @@
+## 2024-09-24 - Optimize pandas string column processing
+**Learning:** Applying string methods like `.str.startswith` and `.str.lower` across entire columns with millions of rows and repeating string values in pandas is extremely slow due to the overhead of executing Python functions on each element.
+**Action:** Iterate over `.value_counts().items()` to compute aggregates and mappings on unique values in pure Python, then apply the mapping using `.map()`. This transforms an O(N) operation into an O(U) operation where U is the number of unique values, yielding massive speedups for low-cardinality string columns.
