@@ -36,12 +36,22 @@ df = df.convert_dtypes()
 space_count = 0
 
 for col in df.select_dtypes(include='string'):
-    space_count += df[col].str.startswith(" ").sum()
-    space_count += df[col].str.endswith(" ").sum()
+    # ⚡ Bolt Optimization: Use dictionary mapping and value_counts for faster string cleaning
+    # Reduces redundant string operations on repeating values by pre-calculating results
+    counts = df[col].value_counts(dropna=False)
 
-    df[col] = df[col].str.strip()                # remove spaces
-    df[col] = df[col].str.lower()                # standardize text
-    df[col] = df[col].replace("", pd.NA)
+    mapping = {}
+    for val, count in counts.items():
+        if isinstance(val, str):
+            if val.startswith(" "): space_count += count
+            if val.endswith(" "): space_count += count
+
+            cleaned = val.strip().lower()
+            mapping[val] = cleaned if cleaned != "" else pd.NA
+        else:
+            mapping[val] = pd.NA
+
+    df[col] = df[col].map(mapping).astype('string')
 
 print("\n🔹 Spaces cleaned:", space_count)
 
@@ -163,7 +173,8 @@ if "vict_age" in df.columns:
 # comparing sample mean with population mean
 if "vict_age" in df.columns:
 
-    sample = df["vict_age"].sample(100, random_state=1)
+    sample_size = min(100, len(df))
+    sample = df["vict_age"].sample(sample_size, random_state=1)
     sample_mean = sample.mean()
     population_mean = df["vict_age"].mean()
     std = df["vict_age"].std()
