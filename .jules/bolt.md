@@ -1,0 +1,3 @@
+## 2024-09-28 - Pandas Dictionary Mapping over String Vectorization
+**Learning:** When standardizing low-cardinality string columns in Pandas, using C-level string vectorization (e.g. `.str.strip()` and `.str.lower()`) across the entire column scales poorly compared to mapping logic exclusively over unique values via `.value_counts()`. Furthermore, explicitly declaring datetime parsing formats allows Pandas to bypass the expensive format inference phase, significantly reducing parsing overhead.
+**Action:** Use dictionary mapping populated via `.value_counts()` for data normalization on low-cardinality datasets, and always specify an explicit format for `pd.to_datetime` to prevent performance bottlenecks.
