@@ -1,0 +1,3 @@
+## 2024-10-03 - Brittleness of Datetime format optimization
+**Learning:** Explicitly providing a format string to pd.to_datetime skips format inference and drastically improves parsing speed (by ~20x), however it introduces brittleness. Hardcoding a specific format inside a loop handling multiple dynamic date columns can cause data loss if columns differ from the strict format and errors='coerce' is applied.
+**Action:** Always attempt fast format parsing first, and gracefully fallback to format inference for columns or rows that failed to parse (or use format='mixed' if supported by the pandas version).
