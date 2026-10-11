@@ -1,0 +1,1 @@
+## 2023-10-24 - Explicit Datetime Format\n**Learning:** In Pandas, specifying the exact datetime format (e.g., format='%m/%d/%Y %I:%M:%S %p') significantly improves parsing speed by skipping format inference, resolving a specific performance bottleneck.\n**Action:** Always provide an explicit format string when parsing datetime columns in pandas scripts.
