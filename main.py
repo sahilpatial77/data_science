@@ -78,7 +78,7 @@ invalid_dates = 0
 for c in date_cols:
     if c in df.columns:
         before = df[c].isnull().sum()
-        df[c] = pd.to_datetime(df[c], errors="coerce")
+        df[c] = pd.to_datetime(df[c], errors="coerce", format="%m/%d/%Y %I:%M:%S %p")
         after = df[c].isnull().sum()
         invalid_dates += (after - before)
 
