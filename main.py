@@ -78,7 +78,21 @@ invalid_dates = 0
 for c in date_cols:
     if c in df.columns:
         before = df[c].isnull().sum()
-        df[c] = pd.to_datetime(df[c], errors="coerce")
+        # Optimize parsing by avoiding dateutil inference for known formats
+        # We try strict formats for known columns to improve speed by ~20x
+        if c in ["date_rptd", "date_occ"]:
+            # Try parsing the first valid non-null value to verify format
+            valid_idx = df[c].first_valid_index()
+            if valid_idx is not None:
+                try:
+                    pd.to_datetime(df[c].loc[valid_idx], format='%m/%d/%Y %I:%M:%S %p', errors="raise")
+                    df[c] = pd.to_datetime(df[c], format='%m/%d/%Y %I:%M:%S %p', errors="coerce")
+                except ValueError:
+                    df[c] = pd.to_datetime(df[c], errors="coerce")
+            else:
+                df[c] = pd.to_datetime(df[c], errors="coerce")
+        else:
+            df[c] = pd.to_datetime(df[c], errors="coerce")
         after = df[c].isnull().sum()
         invalid_dates += (after - before)
 
