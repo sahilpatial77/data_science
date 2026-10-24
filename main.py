@@ -78,7 +78,19 @@ invalid_dates = 0
 for c in date_cols:
     if c in df.columns:
         before = df[c].isnull().sum()
-        df[c] = pd.to_datetime(df[c], errors="coerce")
+        # ⚡ Bolt: Optimizing date parsing by explicitly setting format if possible
+        # This prevents falling back to slow dateutil parser for every single row
+        first_valid_idx = df[c].first_valid_index()
+        if first_valid_idx is not None:
+            try:
+                # Test against known fast format for crimes dataset
+                pd.to_datetime(df.loc[first_valid_idx, c], format="%m/%d/%Y %I:%M:%S %p", errors='raise')
+                df[c] = pd.to_datetime(df[c], format="%m/%d/%Y %I:%M:%S %p", errors="coerce")
+            except ValueError:
+                # Fallback to general parsing if format doesn't match
+                df[c] = pd.to_datetime(df[c], errors="coerce")
+        else:
+            df[c] = pd.to_datetime(df[c], errors="coerce")
         after = df[c].isnull().sum()
         invalid_dates += (after - before)
 

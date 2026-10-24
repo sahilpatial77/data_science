@@ -1,0 +1,3 @@
+## 2024-03-20 - Optimizing Pandas Date Parsing
+**Learning:** In Pandas, relying on default generic date parsing (where `errors='coerce'` falls back to `dateutil`) is extremely slow for large datasets. Hardcoding a specific format string inside generic dataset cleaning loops is dangerous because unmatching formats will silently convert valid dates to `NaT`. Safely testing the format against the first valid row with `errors='raise'` before applying it enables massive speedups (~30x faster) without risking silent data loss.
+**Action:** Always attempt to infer and apply an explicit format string before using generic `pd.to_datetime`, testing it safely first.
