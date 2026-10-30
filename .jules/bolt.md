@@ -1,0 +1,3 @@
+## 2024-10-31 - Pandas Iterative Masking
+**Learning:** Repeatedly filtering and reallocating DataFrames inside a loop (e.g., `df = df[...]`) causes significant memory and performance overhead. Computing a sequential boolean mask across iterations (`mask &= ...`) and applying it outside the loop performs a single allocation, saving substantial time. Additionally, `pd.Series.quantile()` ignores NaNs while `np.percentile()` propagates them. Use `np.nanpercentile()` when optimizing to maintain parity with Pandas.
+**Action:** Optimize iterative Pandas DataFrame filtering with a single boolean mask and use `np.nanpercentile` for quantile calculations to prevent repeated memory allocations and speed up processing.
