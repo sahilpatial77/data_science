@@ -1,0 +1,3 @@
+## 2024-05-13 - Pandas Loop Optimization
+**Learning:** Repeatedly filtering and reallocating DataFrames inside a loop (e.g., `df = df[...]`) causes significant memory and performance overhead in Pandas. Also, when switching to a sequential boolean mask, dependent statistics like quantiles must be calculated only on the remaining valid rows (e.g., `df.loc[mask, col]`) to maintain logical correctness, and `np.nanpercentile()` must be used instead of `np.percentile()` to maintain parity with Pandas' default behavior of ignoring `NaN`s.
+**Action:** Use a sequential boolean mask (e.g., `mask &= ...`) and apply it outside the loop (e.g., `df = df[mask]`) for a single allocation, ensuring internal calculations use only valid rows.
