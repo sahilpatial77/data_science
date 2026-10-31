@@ -1,0 +1,3 @@
+## 2024-11-20 - Sequential filtering optimization
+**Learning:** In Pandas, sequentially filtering a DataFrame inside a loop (`df = df[...]`) triggers repeated memory allocations and copies, significantly degrading performance, especially for large datasets. Calculating a sequential boolean mask (`mask &= ...`) across iterations and applying it once outside the loop (`df = df[mask]`) performs a single allocation, providing measurable speedups without losing exactness (as long as subsequent iterative math operations like quantiles strictly act on the remaining valid rows via `.loc[mask, col]`).
+**Action:** Use sequential boolean masks in iterative filtering loops instead of continuous in-place DataFrame allocations to minimize memory overhead.
