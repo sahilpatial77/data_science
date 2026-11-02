@@ -1,0 +1,3 @@
+## 2024-10-24 - Pandas Sequential Masking Optimization
+**Learning:** Repeatedly filtering and reallocating DataFrames inside a loop (e.g., `df = df[...]`) causes massive memory overhead. Also, when transitioning to a single mask, dependent statistics (like quantiles) for subsequent iterations must be calculated only on the remaining valid rows (e.g., `df.loc[mask, col]`) to preserve exact mathematical bounds.
+**Action:** Use a sequential boolean mask (`mask &= ...`) across iterations and apply it once outside the loop. Always compute intermediate statistics on `df.loc[mask, ...]` to maintain parity.
