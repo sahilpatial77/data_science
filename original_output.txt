@@ -1,0 +1,142 @@
+
+🔹 ORIGINAL SHAPE: (10000, 8)
+
+🔹 DUPLICATES: 0
+
+🔹 MISSING VALUES:
+ date_rptd        0
+date_occ         0
+time_occ         0
+vict_age       101
+lat              0
+lon              0
+crm_cd_desc      0
+string_col       0
+dtype: int64
+
+🔹 Duplicate columns if any one is there in dataset
+
+🔹 Spaces cleaned: 10009
+
+🔹 Missing before: 101
+🔹 Missing after: 0
+
+🔹 Shape after removing duplicates: (10000, 8)
+
+🔹 Invalid dates: 0
+
+🔹 Negative ages removed: 209
+🔹 Invalid coordinates removed
+
+🔹 Outliers removed: 241
+
+🔹 FINAL shape of dataset : (9550, 8)
+
+🔹 FINAL missing values are there in dataset
+ date_rptd      0
+date_occ       0
+time_occ       0
+vict_age       0
+lat            0
+lon            0
+crm_cd_desc    0
+string_col     0
+dtype: int64
+
+🔹 CLEANED DATASET:
+
+             date_rptd            date_occ  ... crm_cd_desc string_col
+0  2020-01-01 00:00:00 2020-01-01 00:00:00  ...     robbery          d
+1  2020-01-01 01:00:00 2020-01-01 01:00:00  ...     robbery          d
+2  2020-01-01 02:00:00 2020-01-01 02:00:00  ...    burglary          d
+3  2020-01-01 03:00:00 2020-01-01 03:00:00  ...   vandalism          b
+4  2020-01-01 04:00:00 2020-01-01 04:00:00  ...    burglary          c
+5  2020-01-01 05:00:00 2020-01-01 05:00:00  ...    burglary          a
+6  2020-01-01 06:00:00 2020-01-01 06:00:00  ...       theft          a
+7  2020-01-01 07:00:00 2020-01-01 07:00:00  ...       theft          c
+8  2020-01-01 08:00:00 2020-01-01 08:00:00  ...    burglary          c
+9  2020-01-01 09:00:00 2020-01-01 09:00:00  ...       theft          d
+10 2020-01-01 10:00:00 2020-01-01 10:00:00  ...     robbery          b
+11 2020-01-01 11:00:00 2020-01-01 11:00:00  ...     robbery          a
+12 2020-01-01 12:00:00 2020-01-01 12:00:00  ...   vandalism          d
+13 2020-01-01 13:00:00 2020-01-01 13:00:00  ...     robbery          d
+14 2020-01-01 14:00:00 2020-01-01 14:00:00  ...    burglary          b
+15 2020-01-01 15:00:00 2020-01-01 15:00:00  ...     assault          a
+16 2020-01-01 16:00:00 2020-01-01 16:00:00  ...       theft          c
+17 2020-01-01 17:00:00 2020-01-01 17:00:00  ...    burglary          d
+18 2020-01-01 18:00:00 2020-01-01 18:00:00  ...       theft          a
+19 2020-01-01 19:00:00 2020-01-01 19:00:00  ...   vandalism          a
+
+[20 rows x 8 columns]
+
+🔹 CLEANED DATASET:
+
+               date_rptd            date_occ  ... crm_cd_desc string_col
+9980 2021-02-19 20:00:00 2021-02-19 20:00:00  ...     robbery          d
+9981 2021-02-19 21:00:00 2021-02-19 21:00:00  ...    burglary          a
+9982 2021-02-19 22:00:00 2021-02-19 22:00:00  ...    burglary          b
+9983 2021-02-19 23:00:00 2021-02-19 23:00:00  ...   vandalism          c
+9984 2021-02-20 00:00:00 2021-02-20 00:00:00  ...    burglary          d
+9985 2021-02-20 01:00:00 2021-02-20 01:00:00  ...     assault          b
+9986 2021-02-20 02:00:00 2021-02-20 02:00:00  ...     assault          d
+9987 2021-02-20 03:00:00 2021-02-20 03:00:00  ...   vandalism          d
+9988 2021-02-20 04:00:00 2021-02-20 04:00:00  ...    burglary          b
+9989 2021-02-20 05:00:00 2021-02-20 05:00:00  ...     assault          d
+9990 2021-02-20 06:00:00 2021-02-20 06:00:00  ...    burglary          a
+9991 2021-02-20 07:00:00 2021-02-20 07:00:00  ...     robbery          d
+9992 2021-02-20 08:00:00 2021-02-20 08:00:00  ...    burglary          a
+9993 2021-02-20 09:00:00 2021-02-20 09:00:00  ...    burglary          c
+9994 2021-02-20 10:00:00 2021-02-20 10:00:00  ...   vandalism          b
+9995 2021-02-20 11:00:00 2021-02-20 11:00:00  ...     robbery          d
+9996 2021-02-20 12:00:00 2021-02-20 12:00:00  ...     assault          a
+9997 2021-02-20 13:00:00 2021-02-20 13:00:00  ...     assault          d
+9998 2021-02-20 14:00:00 2021-02-20 14:00:00  ...    burglary          d
+9999 2021-02-20 15:00:00 2021-02-20 15:00:00  ...       theft          a
+
+[20 rows x 8 columns]
+               date_rptd            date_occ  ... crm_cd_desc string_col
+0    2020-01-01 00:00:00 2020-01-01 00:00:00  ...     robbery          d
+1    2020-01-01 01:00:00 2020-01-01 01:00:00  ...     robbery          d
+2    2020-01-01 02:00:00 2020-01-01 02:00:00  ...    burglary          d
+3    2020-01-01 03:00:00 2020-01-01 03:00:00  ...   vandalism          b
+4    2020-01-01 04:00:00 2020-01-01 04:00:00  ...    burglary          c
+...                  ...                 ...  ...         ...        ...
+9995 2021-02-20 11:00:00 2021-02-20 11:00:00  ...     robbery          d
+9996 2021-02-20 12:00:00 2021-02-20 12:00:00  ...     assault          a
+9997 2021-02-20 13:00:00 2021-02-20 13:00:00  ...     assault          d
+9998 2021-02-20 14:00:00 2021-02-20 14:00:00  ...    burglary          d
+9999 2021-02-20 15:00:00 2021-02-20 15:00:00  ...       theft          a
+
+[9550 rows x 8 columns]
+
+================= STATISTICAL TESTING =================
+
+🔹 T-TEST (Victim Age Comparison)
+T-Statistic: 0.43096033626831404
+P-Value: 0.6665069394485121
+Result: No significant difference
+
+🔹 Z-TEST (Sample vs Population)
+Z-Score: -0.17860639733993056
+Result: No significant difference
+
+🔹 CORRELATION TEST (Age vs Time)
+Correlation: -0.012950468683791284
+P-Value: 0.20570636521156396
+Result: No significant correlation
+Traceback (most recent call last):
+  File "/app/main.py", line 198, in <module>
+    plt.figure(figsize=(10,7))
+  File "/home/jules/.pyenv/versions/3.12.13/lib/python3.12/site-packages/matplotlib/pyplot.py", line 1096, in figure
+    manager = new_figure_manager(
+              ^^^^^^^^^^^^^^^^^^^
+  File "/home/jules/.pyenv/versions/3.12.13/lib/python3.12/site-packages/matplotlib/pyplot.py", line 575, in new_figure_manager
+    _warn_if_gui_out_of_main_thread()
+  File "/home/jules/.pyenv/versions/3.12.13/lib/python3.12/site-packages/matplotlib/pyplot.py", line 552, in _warn_if_gui_out_of_main_thread
+    canvas_class = cast(type[FigureCanvasBase], _get_backend_mod().FigureCanvas)
+                                                ^^^^^^^^^^^^^^^^^^
+  File "/home/jules/.pyenv/versions/3.12.13/lib/python3.12/site-packages/matplotlib/pyplot.py", line 390, in _get_backend_mod
+    switch_backend(rcParams._get("backend"))
+  File "/home/jules/.pyenv/versions/3.12.13/lib/python3.12/site-packages/matplotlib/pyplot.py", line 453, in switch_backend
+    raise ImportError(
+ImportError: Cannot load backend 'TkAgg' which requires the 'tk' interactive framework, as 'headless' is currently running
