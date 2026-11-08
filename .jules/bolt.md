@@ -1,0 +1,3 @@
+## 2026-11-08 - Fast Pandas Outlier Removal
+**Learning:** Iteratively filtering and reallocating DataFrames inside a loop (e.g., `df = df[...]`) is extremely slow and causes unnecessary memory overhead. Additionally, `pd.Series.quantile()` ignores NaNs by default and is slower than `np.nanpercentile()`. When filtering, bounds must only be calculated on rows that are still valid from previous iterations to match the original logic.
+**Action:** Use a sequential boolean mask (`mask &= condition`) and apply it outside the loop once. Use `np.nanpercentile()` for faster bound calculations on valid rows.
