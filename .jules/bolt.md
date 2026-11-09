@@ -1,0 +1,3 @@
+## 2024-03-24 - Pandas Loop Optimization
+**Learning:** Iteratively filtering and reallocating Pandas DataFrames inside loops (e.g., df = df[...]) has huge performance overhead due to reallocation. Computing sequential boolean masks (mask &= ...) first and applying once outside the loop is significantly faster. However, subsequent iteration calculations (like quantiles) MUST use only the currently masked valid subset (e.g., df.loc[mask, col]), not the whole dataset, otherwise the results shift and introduce logical regressions.
+**Action:** When filtering across multiple columns in a loop, avoid continuous reallocation by building up a combined boolean mask. Ensure dependent calculations inside the loop use only the masked view.
