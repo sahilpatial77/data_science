@@ -1,0 +1,3 @@
+## 2024-03-20 - Pandas Mask Reallocation Optimization
+**Learning:** Repeatedly filtering and reallocating DataFrames inside a loop (e.g., `df = df[...]`) causes significant memory and performance overhead in Pandas. Additionally, replacing it with a sequential boolean mask requires computing dependent statistics (like quantiles) only on the remaining valid rows (e.g., `df.loc[mask, col]`) to maintain mathematical correctness.
+**Action:** Use a sequential boolean mask (`mask &= ...`) across iterations and apply it outside the loop (`df = df[mask]`) to perform a single allocation, ensuring any intermediate calculations explicitly index with the mask.
